@@ -1,0 +1,22 @@
+:root {
+  --bg: #0f1115; --card: #161a22; --muted: #8b93a7; --text: #e6e9ef;
+  --accent: #6ee7b7; --accent-2: #60a5fa;
+  --success:#22c55e; --warning:#f59e0b; --danger:#ef4444; --info:#60a5fa;
+}
+html[data-theme="light"] { --bg:#f6f8fb; --card:#fff; --muted:#5b6479; --text:#0f172a; }
+
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);
+font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial}
+a{color:inherit;text-decoration:none}
+.container{width:min(1200px,100% - 32px);margin-inline:auto;padding-block:20px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
+border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);
+background:linear-gradient(180deg,color-mix(in srgb, var(--accent) 35%, transparent),
+color-mix(in srgb, var(--accent) 15%, transparent));font-weight:600}
+.btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--accent-2)35%,transparent),
+color-mix(in srgb,var(--accent-2)15%,transparent))}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;
+border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+.price{font-weight:700}

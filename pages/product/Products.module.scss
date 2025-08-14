@@ -1,0 +1,33 @@
+// Products.module.scss
+$gap: 16px;
+$gap-sm: 12px;
+$sidebar-w: 260px;
+$card-min: 260px;
+$bp-md: 960px;
+$sticky-offset: 70px;
+
+@mixin down($w) { @media (max-width: $w) { @content; } }
+
+.layout {
+  display: grid;
+  grid-template-columns: $sidebar-w 1fr;
+  gap: $gap;
+  align-items: start;
+
+  @include down($bp-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: $gap-sm;
+  grid-template-columns: repeat(auto-fill, minmax($card-min, 1fr));
+}
+
+.sidebar {
+  position: sticky;
+  top: $sticky-offset;
+  height: max-content; // надійніше, ніж fit-content
+  align-self: start;
+}
