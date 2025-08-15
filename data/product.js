@@ -1,8 +1,58 @@
 export const products = [
-  { id:1, sku:'BOWL-800', title:'Миска 800мл', category:'Посуд', price:159, promoPrice:139, stock:27,
-    thumb:'', image:'', description:'Нержавіюча сталь. Обʼєм 800мл.' },
-  { id:2, sku:'LEASH-RED', title:'Повідок Red', category:'Амуниція', price:199, stock:12,
-    thumb:'', image:'', description:'Міцний нейлон, колір червоний.' },
-  { id:3, sku:'TOY-BONE', title:'Іграшка «Кістка»', category:'Іграшки', price:149, stock:0,
-    thumb:'', image:'', description:'Гума, для собак середніх порід.' }
+  { 
+    id: 1, 
+    sku: 'FEED-TOP-BEEF', 
+    title: 'Корм ТОР Яловичина', 
+    category: 'Корм', 
+    price: 299, 
+    promoPrice: 259, 
+    stock:  1,
+    thumb: '/images/Тор_Яловичина.png', 
+    image: '/images/Тор_Яловичина.png', 
+    description: 'Сухий корм преміум-класу з яловичиною.' 
+  },
+  { 
+    id: 2, 
+    sku: 'FEED-TOP-CHICKEN', 
+    title: 'Корм ТОР Курка', 
+    category: 'Корм', 
+    price: 289, 
+    stock: 30,
+    thumb: '', 
+    image: '', 
+    description: 'Сухий корм преміум-класу з куркою.' 
+  },
+  { 
+    id: 3, 
+    sku: 'FEED-FINCHI-BEEF', 
+    title: 'Корм Фінчі Яловичина', 
+    category: 'Корм', 
+    price: 249, 
+    stock: 18,
+    thumb: '', 
+    image: '', 
+    description: 'Сухий корм для собак з яловичиною від бренду Фінчі.' 
+  },
+  { 
+    id: 4, 
+    sku: 'FEED-EASYCOOK', 
+    title: 'Корм ІЗІ КУК', 
+    category: 'Корм', 
+    price: 199, 
+    stock: 40,
+    thumb: '', 
+    image: '', 
+    description: 'Сухий корм для собак із збалансованим складом.' 
+  },
+   { 
+    id: 4, 
+    sku: 'FEED-EASYCOOK', 
+    title: 'Якісь вітаміни', 
+    category: 'Вітаміни для котів', 
+    price: 199, 
+    stock: 40,
+    thumb: '', 
+    image: '', 
+    description: 'Сухий корм для собак із збалансованим складом.' 
+  }
 ];

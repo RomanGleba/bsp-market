@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { products as mock } from '../data/product';
 
 export const fetchProducts = createAsyncThunk('products/fetch', async () => {
-  // тут можна підключити реальний бекенд. Поки — мок
   return mock;
 });
 

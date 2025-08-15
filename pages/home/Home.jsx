@@ -12,8 +12,6 @@ const Home = () => {
   return (
     <section className="container">
       <div className={'card ' + s.hero}>
-        <h1>Petz Market 🐾</h1>
-        <p>Професійний зоомагазин. Швидка доставка. Актуальні ціни.</p>
       </div>
       <h2>Хіти</h2>
       <div className={s.grid}>

@@ -1,79 +1,118 @@
-import React, { useEffect, useMemo, useState, useDeferredValue } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { fetchProducts, selectProducts } from '../../store/productsSlice';
 import ProductCard from '../../components/productcard/ProductCard';
-import FiltersProduct from '../../components/filters/FiltersProduct';
 import s from './Products.module.scss';
 
+const PAGE_SIZE = 12;
+
 export default function Products() {
-  const d = useDispatch();
+  const dispatch = useDispatch();
   const all = useSelector(selectProducts);
 
-  const [q, setQ] = useState('');
-  const [cat, setCat] = useState('all');
-  const [sort, setSort] = useState('popular');
-
- 
-  useEffect(() => {
-    if (!all?.length) d(fetchProducts());
-  }, [d, all?.length]);
-
-  const cats = useMemo(() => {
-    const set = new Set();
-    for (const p of all ?? []) {
-      if (p?.category) set.add(p.category);
-    }
-    return ['all', ...Array.from(set)];
-  }, [all]);
-
+  const [sp, setSp] = useSearchParams();
+  const q = sp.get('q') || '';
   const qDeferred = useDeferredValue(q);
 
-  const getPrice = (p) => Number(p?.promoPrice ?? p?.price ?? Number.POSITIVE_NUMBER);
+  const [page, setPage] = useState(Number(sp.get('page') || 1));
 
-  const list = useMemo(() => {
-    const qn = (qDeferred ?? '').toLowerCase();
+  useEffect(() => { dispatch(fetchProducts()); }, [dispatch]);
 
-    let arr = (all ?? []).filter((p) => (p?.title ?? '').toLowerCase().includes(qn));
-
-    if (cat !== 'all') {
-      arr = arr.filter((p) => (p?.category ?? '') === cat);
+  const filtered = useMemo(() => {
+    let arr = all;
+    if (qDeferred.trim()) {
+      const needle = qDeferred.toLowerCase();
+      arr = arr.filter(p =>
+        p.title.toLowerCase().includes(needle) ||
+        p.sku?.toLowerCase().includes(needle)
+      );
     }
-
-    if (sort === 'price-asc') {
-      arr = arr.slice().sort((a, b) => getPrice(a) - getPrice(b));
-    } else if (sort === 'price-desc') {
-      arr = arr.slice().sort((a, b) => getPrice(b) - getPrice(a));
-    } else {
-      // "popular" як дефолт — якщо немає рейтингу/продажів, сортуємо стабільно за title
-      const collator = new Intl.Collator('uk');
-      arr = arr.slice().sort((a, b) => collator.compare(a?.title ?? '', b?.title ?? ''));
-    }
-
     return arr;
-  }, [all, qDeferred, cat, sort]);
+  }, [all, qDeferred]);
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+
+  const pageItems = useMemo(
+    () => filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filtered, currentPage]
+  );
+
+  useEffect(() => {
+    const next = new URLSearchParams();
+    if (q) next.set('q', q);
+    if (currentPage > 1) next.set('page', String(currentPage));
+    setSp(next, { replace: true });
+  }, [q, currentPage, setSp]);
+
+  useEffect(() => { setPage(1); }, [qDeferred]);
+
+  const clearQuery = () => {
+    const next = new URLSearchParams(sp);
+    next.delete('q');
+    next.delete('page');
+    setSp(next, { replace: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <section className="container">
       <div className={s.layout}>
-        <aside className={'card ' + s.sidebar}>
-          <h3 style={{ marginTop: 0 }}>Фільтри</h3>
-          <FiltersProduct
-            q={q}
-            setQ={setQ}
-            cat={cat}
-            setCat={setCat}
-            sort={sort}
-            setSort={setSort}
-            cats={cats}
-          />
-        </aside>
+        <div className={s.topBar}>
+          <div className={s.count}>
+            Знайдено: <b>{total}</b> · стор. {currentPage}/{totalPages}
+          </div>
+          {q && (
+            <button className="btn" onClick={clearQuery} title="Очистити пошук">
+              ✕ Очистити «{q}»
+            </button>
+          )}
+        </div>
 
         <div className={s.grid}>
-          {list.map((p) => (
-            <ProductCard key={p?.id ?? p?.sku ?? p?.title} product={p} />
-          ))}
-          {list.length === 0 && <div className="card">Нічого не знайдено.</div>}
+          {pageItems.map(p => <ProductCard key={p.id} product={p} />)}
         </div>
+
+        {total === 0 && (
+          <div className={`card ${s.empty}`}>
+            Нічого не знайдено. Спробуйте інший запит.
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <nav className={s.pager} aria-label="Пагінація">
+            <button
+              className="btn"
+              disabled={currentPage === 1}
+              onClick={() => setPage(p => p - 1)}
+            >
+              ‹ Назад
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .slice(0, 7)
+              .map(n => (
+                <button
+                  key={n}
+                  className="btn"
+                  aria-current={n === currentPage ? 'page' : undefined}
+                  onClick={() => setPage(n)}
+                >
+                  {n}
+                </button>
+              ))}
+
+            <button
+              className="btn"
+              disabled={currentPage === totalPages}
+              onClick={() => setPage(p => p + 1)}
+            >
+              Вперед ›
+            </button>
+          </nav>
+        )}
       </div>
     </section>
   );

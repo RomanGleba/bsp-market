@@ -8,14 +8,17 @@ const ProductCard = ({ product }) => {
   const price = product.promoPrice ?? product.price;
   const out = (product?.stock ?? 0) <= 0;
 
+  // щоб не передавати порожній рядок у src
+  const imgSrc = product.thumb || product.image || null;
+
   return (
     <div className={`card ${s.card} ${out ? s.out : ''}`}>
       <div className={s.media}>
-        <img
-          className={s.thumb}
-          src={product.thumb || product.image || `https://picsum.photos/seed/${product.sku}/400/300`}
-          alt={product.title}
-        />
+        {imgSrc ? (
+          <img className={s.thumb} src={imgSrc} alt={product.title} />
+        ) : (
+          <div className={s.noimg} aria-label="Зображення відсутнє" />
+        )}
         {out && <span className={s.badgeOut}>Немає в наявності</span>}
       </div>
 
@@ -26,7 +29,7 @@ const ProductCard = ({ product }) => {
           <>
             <div>
               <span className="price">{Math.round(price)} грн</span>{' '}
-              <span style={{ textDecoration: 'line-through', opacity: .7 }}>
+              <span style={{ textDecoration: 'line-through', opacity: 0.7 }}>
                 {Math.round(product.price)} грн
               </span>
             </div>
@@ -38,7 +41,9 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className={s.row}>
-        <span className="badge">{out ? 'Немає' : `В наявності: ${product.stock}`}</span>
+        <span className={`badge ${out ? s.badgeOutPill : s.badgeIn}`}>
+          {out ? 'Немає в наявності' : 'Є в наявності'}
+        </span>
         <button
           className="btn primary"
           disabled={out}
