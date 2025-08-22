@@ -1,0 +1,126 @@
+:root{
+  --rz-accent: #00a046;             /* зелений як у Rozetka */
+  --rz-accent-2: #10b981;           /* м'який зелений */
+  --rz-text: #0f172a;
+  --rz-muted: #6b7280;
+  --rz-brd: rgba(0,0,0,.10);
+  --rz-card: #ffffff;
+}
+
+.wrap { margin-top: 16px; display: grid; gap: 16px; }
+
+/* Sticky верхня смуга вкладок */
+.tabsBar{
+  position: sticky; top: 64px; z-index: 5;
+  display: flex; gap: 10px; padding: 8px 0;
+  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--rz-card) 92%, transparent);
+  border-bottom: 1px solid var(--rz-brd);
+}
+
+/* Кнопка вкладки */
+.tabBtn{
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1px solid transparent;
+  color: var(--rz-text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .06s ease;
+}
+.tabBtn:hover{ background:#eef2f7; }
+.tabBtn:active{ transform: translateY(1px); }
+.active{
+  background: color-mix(in oklab, var(--rz-accent) 14%, transparent);
+  border-color: color-mix(in oklab, var(--rz-accent) 35%, transparent);
+  color:#065f46;
+}
+
+/* Карточка блоку */
+.card{
+  background: var(--rz-card);
+  border: 1px solid var(--rz-brd);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.panel{ padding: 16px; }
+
+/* ------- Summary та гістограма ------- */
+.rqWrap{ display: grid; gap: 12px; }
+
+.switch{ display: flex; gap: 8px; }
+.btn{
+  padding: 8px 12px; border-radius: 10px;
+  background: #f3f4f6; border: 1px solid transparent; cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover{ background:#eef2f7; }
+.btn.active{
+  background: color-mix(in oklab, var(--rz-accent) 14%, transparent);
+  border-color: color-mix(in oklab, var(--rz-accent) 35%, transparent);
+  color:#065f46;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 16px;
+}
+.summary{ display: grid; align-content: start; gap: 6px; }
+.avgNum{ font-size: 34px; font-weight: 900; }
+.muted{ color: var(--rz-muted); }
+.starsRead{ letter-spacing: 2px; font-size: 18px; }
+
+.bars{ display: grid; gap: 6px; }
+.barRow{
+  display: grid; grid-template-columns: 56px 1fr 34px; gap: 8px; align-items: center;
+}
+.starLabel{ text-align: right; color: var(--rz-muted); }
+.barTrack{
+  height: 8px; background: #eef2f7; border-radius: 6px; overflow: hidden;
+}
+.barFill{ height: 100%; background: var(--rz-accent); }
+
+/* ------- Форма і списки ------- */
+.listWrap{ grid-column: 1 / -1; }
+.form{ display: grid; gap: 8px; margin: 8px 0 12px; }
+.ta{
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--rz-brd); background: #fff;
+  resize: vertical;
+}
+.stars{ display: inline-flex; gap: 4px; }
+.starBtn{
+  background: none; border: none; cursor: pointer; line-height: 1; padding: 2px 3px;
+  color: #9ca3af; transition: transform .08s ease, color .12s ease;
+}
+.starBtn:hover{ transform: translateY(-1px); }
+.starBtnActive{ color: #f59e0b; }
+
+.list{ list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.revItem{ padding: 12px; border-radius: 12px; }
+.revHead{ display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.revStars{ color:#f59e0b; font-size: 16px; }
+.date{ color: var(--rz-muted); }
+.txt{ margin: 8px 0 0; white-space: pre-wrap; }
+
+/* --------- Опис з розгортанням (якщо використаєш) --------- */
+.desc{ position:relative; overflow:hidden; max-height: 220px; transition:max-height .32s ease; }
+.open{ max-height: 9999px; }
+.fade{
+  position:absolute; inset: auto 0 0 0; height:56px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+}
+.more{
+  margin-top:10px; background:transparent; border:none; cursor:pointer;
+  color: var(--rz-accent); font-weight: 700;
+}
+
+/* ------- Утиліти ------- */
+.row{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+
+@media (max-width: 920px){
+  .grid{ grid-template-columns: 1fr; }
+  .tabsBar{ top: 56px; }
+}

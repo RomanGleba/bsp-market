@@ -1,0 +1,79 @@
+$gap: 16px;
+$gap-sm: 12px;
+$card-min: 260px;
+$bp-md: 960px;
+$bp-sm: 600px;
+
+.layout {
+  display: block; // тут немає sidebar
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .count {
+    opacity: 0.75;
+    font-size: 14px;
+  }
+
+  button {
+    white-space: nowrap;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: $gap-sm;
+  grid-template-columns: repeat(auto-fill, minmax($card-min, 1fr));
+}
+
+.empty {
+  margin-top: 12px;
+  padding: 14px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.pager {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 14px;
+  flex-wrap: wrap;
+
+  button[aria-current='page'] {
+    background: var(--focus-brd, #3b82f6);
+    color: #fff;
+  }
+}
+
+/* 📱 Мобільна адаптація */
+@media (max-width: $bp-md) {
+  .grid {
+    gap: 10px;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .count {
+      font-size: 13px;
+    }
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  .pager {
+    gap: 6px;
+  }
+}

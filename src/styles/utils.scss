@@ -1,0 +1,30 @@
+/* ===========================
+   Utilities — Layout & Spacing
+   =========================== */
+
+.grid { display: grid; gap: var(--space-4); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: var(--bp-lg)) { .grid-4 { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: var(--bp-md)) { .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: var(--bp-sm)) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+.flex { display: flex; gap: var(--space-3); align-items: center; }
+.flex-col { flex-direction: column; }
+.flex-between { display:flex; justify-content: space-between; align-items: center; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mb-4 { margin-bottom: var(--space-4); }
+.p-4  { padding: var(--space-4); }
+
+/* Приховання / доступність */
+.hidden { display: none !important; }
+.sr-only {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}

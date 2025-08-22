@@ -1,0 +1,47 @@
+.media {
+  position: relative;
+}
+
+.badgeOut {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  background: rgba(220, 53, 69, 0.9); // червона плашка
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  pointer-events: none;
+  user-select: none;
+}
+
+// модифікатор "немає в наявності"
+.out {
+  .thumb {
+    filter: grayscale(1) brightness(0.9);
+  }
+
+  // приглушити картку і забрати ефект підйому
+  opacity: 0.95;
+  transform: none !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+  // кнопка недоступна візуально й по взаємодії
+  :global(.btn.primary) {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}
+
+
+.badgeIn {
+  background: #4caf50; // зелений
+  color: white;
+}
+
+.badgeOut {
+  background: #f44336; // червоний
+  color: white;
+}

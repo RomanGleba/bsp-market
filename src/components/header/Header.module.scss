@@ -1,0 +1,171 @@
+/* ===========================
+   Header.module.scss
+   — скляний прилипач з м’якими ховерами
+   =========================== */
+
+:root {
+  /* базові */
+  --blur: 10px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --elev: 0 6px 14px rgba(0,0,0,.08);
+
+  /* підстраховка, якщо глобальні не задані */
+  --card: #ffffff;
+  --accent: #5dd1b3;
+  --accent-2: #9ff385;
+
+  /* стилі для фокусів/ховерів */
+  --glass-bg: color-mix(in oklab, var(--card) 88%, transparent);
+  --glass-brd: rgba(255,255,255,.10);
+  --hover-bg: rgba(255,255,255,.08);
+  --focus-brd: color-mix(in oklab, var(--accent-2) 60%, transparent);
+}
+
+/* ===== Header (glass, sticky) ===== */
+.header {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-brd);
+  box-shadow: var(--elev);
+
+  @supports (backdrop-filter: blur(1px)) {
+    backdrop-filter: blur(var(--blur)) saturate(135%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(135%);
+  }
+
+  &::after {
+    content:"";
+    display:block; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+    opacity:.55;
+  }
+}
+
+/* ===== Внутрішній контейнер ===== */
+.inner {
+  display:flex; align-items:center; gap:14px;
+  padding:10px 0; min-height:64px;
+}
+
+/* ===== Бренд (без обертання логотипа) ===== */
+.brand {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:6px 8px; border-radius: var(--radius);
+  background:transparent; border:none; color:inherit; cursor:pointer;
+  font-weight:800; font-size:18px; letter-spacing:.2px;
+  transition: background .2s ease, transform .12s ease;
+
+  &:hover { background: var(--hover-bg); }
+  &:active { transform: translateY(1px); }
+}
+
+.logo {
+
+}
+
+/* ===== Центр під пошук ===== */
+.center { flex:1; display:flex; align-items:center; }
+.center > * { width:100%; } /* розтягнути SearchBar */
+
+/* ===== Навігація ===== */
+.nav {
+  display:flex; align-items:center; gap:10px; flex-wrap:nowrap;
+}
+
+.link {
+  position:relative;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 12px; border-radius: var(--radius);
+  border:1px solid transparent;
+  font-weight:600; line-height:1; opacity:.96;
+  transition: background .15s ease, border-color .15s ease, transform .08s ease;
+
+  &:hover { background: var(--hover-bg); }
+  &:active { transform: translateY(1px); }
+
+  &:focus-visible {
+    outline:none; border-color: var(--focus-brd);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--focus-brd) 35%, transparent);
+  }
+
+  /* тонке підкреслення при hover */
+  &::after {
+    content:""; position:absolute; left:12px; right:12px; bottom:6px;
+    height:2px; border-radius:2px;
+    background: color-mix(in oklab, var(--accent-2) 70%, transparent);
+    transform: scaleX(0); transform-origin:left;
+    transition: transform .18s ease;
+  }
+  &:hover::after { transform: scaleX(1); }
+}
+
+/* активний пункт (якщо NavLink дає aria-current) */
+.link--active,
+.link[aria-current="page"] {
+  background: color-mix(in oklab, var(--accent-2) 12%, transparent);
+  border-color: color-mix(in oklab, var(--accent-2) 35%, transparent);
+}
+
+/* ===== Кошик і бейдж ===== */
+.basket { position:relative; padding-right:6px; }
+
+/* Іконка кошика – саме вона нахиляється */
+.cartIcon {
+  display:inline-block;
+  transform: translateZ(0) rotate(0deg) skewX(0deg);
+  transform-origin: 60% 50%;
+  transition: transform .18s cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+.basket:hover .cartIcon,
+.cartIcon:hover {
+  /* легкий нахил вправо + мікрозсув */
+  transform: rotate(16deg) skewX(-8deg) translateX(2px);
+}
+.basket:active .cartIcon {
+  transform: rotate(18deg) skewX(-9deg) translateX(3px) scale(.98);
+}
+
+/* Булька-лічильник, нахиляється ВПРАВО при hover */
+.bubble {
+  position:absolute; top:-6px; right:-6px;
+  min-width:18px; height:18px;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 5px;
+  font-size:12px; font-weight:800; color:#000;
+  border-radius:999px; background: var(--accent-2);
+
+  border:1px solid color-mix(in oklab, #000 12%, transparent);
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+
+  /* 40% нахил = arctan(0.4) ≈ 21.8° */
+  --bubble-skew: -21.8deg;
+  transform: skewX(0deg) translateZ(0);
+  transform-origin: right center;
+  transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease;
+  will-change: transform;
+}
+
+.basket:hover .bubble,
+.bubble:hover {
+  transform: skewX(var(--bubble-skew)) translateX(2px);
+}
+
+/* ===== Адаптив ===== */
+@media (max-width: 900px) {
+  .inner { min-height:56px; padding:8px 0; }
+  .link { padding:8px 10px; }
+  .center { order: 3; width:100%; } /* пошук вниз */
+  .nav { margin-left:auto; }
+}
+
+@media (max-width: 560px) {
+  .brand span { display:none; }   /* лишаємо тільки лого */
+  .link::after { display:none; }  /* менше ефектів на малих екранах */
+}
+
+/* ===== Повага до налаштувань доступності ===== */
+@media (prefers-reduced-motion: reduce) {
+  .brand, .link, .cartIcon, .bubble, .nav, .logo { transition:none !important; }
+}

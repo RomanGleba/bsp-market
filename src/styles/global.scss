@@ -1,0 +1,105 @@
+/* =====================  GLOBAL (light, cozy, green-first)  ===================== */
+
+html { scrollbar-gutter: stable both-edges; }
+
+* { box-sizing: border-box; }
+*::before, *::after { box-sizing: inherit; }
+
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg, video { display:block; max-width:100%; height:auto; }
+a { color:inherit; text-decoration:none; }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--focus-brd) 45%, transparent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.container {
+  width:min(1200px, 100% - 32px); /* ✅ виправлено */
+  margin-inline:auto;
+  padding-block:20px;
+}
+
+/* === Cards === */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+/* === Buttons === */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  padding:10px 16px;
+  border-radius:10px;
+  border:1px solid transparent;
+  background: linear-gradient(180deg, var(--grad-acc-1), var(--grad-acc-2));
+  font-weight:600; line-height:1;
+  color:#0b1220;
+  box-shadow: var(--shadow-sm);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, box-shadow .3s;
+}
+.btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 12px rgba(34,197,94,.45); /* green glow */
+}
+.btn:active {
+  transform: scale(.98);
+  filter: brightness(.97);
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity:.6;
+  cursor:not-allowed;
+  box-shadow:none;
+  transform:none;
+}
+.btn.primary {
+  background: linear-gradient(180deg, var(--grad-acc2-1), var(--grad-acc2-2));
+}
+
+/* === Badges === */
+.badge {
+  display:inline-block; padding:2px 8px;
+  border-radius:999px; font-size:12px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 85%, var(--bg));
+  color: var(--muted);
+}
+
+/* Skeleton Loader */
+.skeleton {
+  display:block; min-height:60vh; border-radius:12px;
+  background: linear-gradient(90deg,#e5e7eb 0%,#f1f5f9 50%,#e5e7eb 100%);
+  background-size:200% 100%;
+  animation: sk 1.2s linear infinite;
+}
+@keyframes sk { 0%{background-position:0 0} 100%{background-position:200% 0} }
+
+/* Disable animations before ready */
+html:not(.ready) * {
+  transition:none !important;
+  animation-duration:0s !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0s !important; transition: none !important; }
+}
+

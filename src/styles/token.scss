@@ -1,0 +1,54 @@
+/* ===========================
+   Design Tokens — E-commerce
+   =========================== */
+
+/* LIGHT (default) */
+:root {
+  /* Surface / text */
+  --bg:        #f6f8fb;
+  --surface:   #ffffff;
+  --surface-2: #ffffff;
+  --text:      #0f172a;
+  --muted:     #5b6479;
+  --line:      rgba(15,23,42,.12);
+
+  /* Accents: primary — GREEN (eco), secondary — darker green */
+  --accent:    #22c55e;  /* primary */
+  --accent-2:  #16a34a;  /* darker */
+  --accent-warm:#D4A373; /* honey, optional */
+  --accent-warm-2:#C68C63;
+
+  /* Semantics */
+  --success:   #22c55e;
+  --warning:   #f59e0b;
+  --danger:    #ef4444;
+  --info:      #60a5fa;
+
+  /* Shadows / radius */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.06);
+  --shadow:    0 6px 16px rgba(0,0,0,.08);
+  --radius:    12px;
+
+  /* Gradients (green & honey) */
+  --grad-acc-1:  color-mix(in srgb, var(--accent)   92%, #fff);
+  --grad-acc-2:  color-mix(in srgb, var(--accent)   74%, #fff);
+  --grad-acc2-1: color-mix(in srgb, var(--accent-2) 92%, #fff);
+  --grad-acc2-2: color-mix(in srgb, var(--accent-2) 74%, #fff);
+
+  --grad-warm-1: color-mix(in srgb, var(--accent-warm) 92%, #fff);
+  --grad-warm-2: color-mix(in srgb, var(--accent-warm) 74%, #fff);
+
+  /* Focus */
+  --focus-brd:#3b82f6;
+
+  /* Derived */
+  --card: var(--surface);
+  --border: #e6e8ee;
+
+  color-scheme: light;
+}
+
+/* Breakpoints */
+:root {
+  --bp-sm: 640px; --bp-md: 768px; --bp-lg: 1024px; --bp-xl: 1280px;
+}
