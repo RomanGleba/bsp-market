@@ -5,8 +5,7 @@ export default function TabDesc({ product }) {
 
     return (
         <div className={styles.section}>
-            <h2 className={styles.h2}> Опис</h2>
-            {/* h2 рендериться у ProductSections (DescExpandable) */}
+            <h2 className={styles.h2}>Опис</h2>
             {descriptionHtml ? (
                 <div
                     className={styles.descHtml}

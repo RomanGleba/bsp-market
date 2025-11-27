@@ -3,11 +3,11 @@ import React from 'react';
 export default function FiltersProduct({
   cat, setCat, cats = [],
   sort, setSort,
-  price = { min: '', max: '' },      // ✅ дефолт
+  price = { min: '', max: '' },
   setPrice,
-  inStock = false, setInStock,        // ✅ дефолт
-  brands = new Set(), setBrands,      // ✅ дефолт
-  attrs = {}, setAttrs,               // ✅ дефолт
+  inStock = false, setInStock,
+  brands = new Set(), setBrands,
+  attrs = {}, setAttrs,
   allBrands = [],
   allAttrs = {}
 }) {
@@ -122,3 +122,4 @@ export default function FiltersProduct({
     </div>
   );
 }
+

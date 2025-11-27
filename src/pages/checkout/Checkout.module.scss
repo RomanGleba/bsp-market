@@ -1,0 +1,438 @@
+/* src/pages/Checkout/Checkout.module.scss */
+
+.page {
+  background: #f3f4f6; /* як у Comfy – світло-сірий фон */
+  padding: 24px 0 40px;
+}
+
+.title {
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+/* 🔹 Верхня лінія кроків (1–2–3), як у Comfy */
+.stepsBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.stepItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.stepItem:hover {
+  background: #e5f9ed;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+
+.stepItemActive {
+  border-color: #22c55e;
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 600;
+}
+
+.stepCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: #22c55e;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.stepText {
+  font-size: 13px;
+}
+
+.stepDivider {
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(to right, #e5e7eb, #d1d5db);
+}
+
+/* Головна форма */
+.form {
+  margin-top: 4px;
+}
+
+/* Сітка: ліва колонка (кроки), права (підсумок) */
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.colMain {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.colAside {
+  position: sticky;
+  top: 88px; /* під хедер */
+  align-self: flex-start;
+
+  @media (max-width: 960px) {
+    position: static;
+  }
+}
+
+/* ====== Картки-кроки ====== */
+.block {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  padding: 14px 16px 16px;
+}
+
+.blockHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.stepBadge {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  background: #22c55e;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.blockTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.blockHint {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.blockBody {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ====== Інпути ====== */
+
+.form input,
+.form select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d4d4d8;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.form input:focus,
+.form select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2);
+  background-color: #f9fff9;
+}
+
+.mtSmall {
+  margin-top: 6px;
+}
+
+/* Горизонтальні ряди */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.row input {
+  flex: 1 1 0;
+  min-width: 180px;
+}
+
+/* Радіо в доставці */
+.deliveryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.deliveryRadio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+
+  input[type='radio'] {
+    width: auto;
+  }
+}
+
+/* ====== Блок Нової пошти ====== */
+.npBlock {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.npField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.npLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.npSelect {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 11px;
+  border-radius: 6px;
+  border: 1px solid #d4d4d8;
+  font-size: 14px;
+  background: #fff;
+}
+
+.npSelect:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+.npBlock .row {
+  align-items: stretch;
+}
+
+.npBlock input {
+  flex: 1 1 auto;
+}
+
+.npBlock button.btn {
+  white-space: nowrap;
+  padding-inline: 18px;
+}
+
+/* ====== Оплата – карти ====== */
+.payOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.payOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+
+  input[type='radio'] {
+    margin-top: 2px;
+  }
+
+  &:hover {
+    border-color: #22c55e;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.09);
+  }
+}
+
+.payOptionActive {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
+  background: #f0fdf4;
+}
+
+.payBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.payHint {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ====== Права колонка – підсумок замовлення ====== */
+
+.summaryCard {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  padding: 16px 16px 14px;
+}
+
+.summaryTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+.summaryList {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.summaryItemInfo {
+  flex: 1 1 auto;
+}
+
+.summaryName {
+  font-weight: 500;
+  color: #111827;
+}
+
+.summaryMeta {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.summaryPrice {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.summaryTotalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.summaryTotal {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.summaryBtn {
+  width: 100%;
+  margin-top: 12px;
+  justify-content: center;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.summaryNote {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Помилка */
+.error {
+  margin-top: 4px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+/* Mobile / tablet адаптація */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .row input {
+    min-width: 100%;
+  }
+
+  .npBlock .row {
+    flex-direction: row;
+  }
+
+  .npBlock button.btn {
+    flex-shrink: 0;
+  }
+
+  .summaryCard {
+    margin-top: 8px;
+  }
+
+  .stepsBar {
+    flex-wrap: nowrap;
+  }
+}

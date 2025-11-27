@@ -1,3 +1,6 @@
+@use './token' as *;
+@use './utils' as *;
+
 /* =====================  GLOBAL (light, cozy, green-first)  ===================== */
 
 html { scrollbar-gutter: stable both-edges; }
@@ -5,12 +8,26 @@ html { scrollbar-gutter: stable both-edges; }
 * { box-sizing: border-box; }
 *::before, *::after { box-sizing: inherit; }
 
-body {
+:root{
+  --bg:#fafafa;
+  --text:#0f172a;
+  --card:#fff;
+  --border:#e5e7eb;
+  --shadow-sm:0 2px 10px rgba(0,0,0,.06);
+  --shadow:0 8px 26px rgba(0,0,0,.10);
+
+  --grad-acc-1:#b5f5c9; --grad-acc-2:#86efac;
+  --grad-acc2-1:#34d399; --grad-acc2-2:#22c55e;
+  --focus-brd:#22c55e;
+}
+
+body{
   margin:0; background:var(--bg); color:var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
 
+/* media */
 img, svg, video { display:block; max-width:100%; height:auto; }
 a { color:inherit; text-decoration:none; }
 a:focus-visible,
@@ -18,88 +35,48 @@ button:focus-visible,
 input:focus-visible,
 [role="button"]:focus-visible {
   outline: 3px solid color-mix(in oklab, var(--focus-brd) 45%, transparent);
-  outline-offset: 2px;
-  border-radius: 8px;
+  outline-offset: 2px; border-radius: 8px;
 }
 
-.container {
-  width:min(1200px, 100% - 32px); /* ✅ виправлено */
-  margin-inline:auto;
-  padding-block:20px;
-}
+/* ===== Containers =====
+   .container        → центрований контент (макс 1200)
+   .container--wide  → ширше (макс 1440)
+   .container--fluid → на всю, з внутрішніми полями
+   .fullbleed        → секція «від краю до краю» без полів
+*/
+.container{ width:min(1200px, 100% - 32px); margin-inline:auto; padding-block:20px; }
+.container--wide{ width:min(1440px, 100% - 32px); margin-inline:auto; padding-block:20px; }
+.container--fluid{ width:100%; margin:0; padding:20px 16px; }
+.fullbleed{ width:100vw; margin-left:50%; transform:translateX(-50%); }
 
-/* === Cards === */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow .2s ease, transform .2s ease;
-}
-.card:hover {
-  box-shadow: var(--shadow);
-  transform: translateY(-2px);
-}
+/* утиліта прибрати бокові поля у внутрішніх елементах при потребі */
+.no-gutters{ padding-left:0 !important; padding-right:0 !important; }
 
-/* === Buttons === */
-.btn {
-  display:inline-flex; align-items:center; justify-content:center;
-  cursor:pointer;
-  padding:10px 16px;
-  border-radius:10px;
-  border:1px solid transparent;
-  background: linear-gradient(180deg, var(--grad-acc-1), var(--grad-acc-2));
-  font-weight:600; line-height:1;
-  color:#0b1220;
-  box-shadow: var(--shadow-sm);
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, box-shadow .3s;
-}
-.btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 12px rgba(34,197,94,.45); /* green glow */
-}
-.btn:active {
-  transform: scale(.98);
-  filter: brightness(.97);
-}
-.btn:disabled,
-.btn[aria-disabled="true"] {
-  opacity:.6;
-  cursor:not-allowed;
-  box-shadow:none;
-  transform:none;
-}
-.btn.primary {
-  background: linear-gradient(180deg, var(--grad-acc2-1), var(--grad-acc2-2));
-}
+/* Cards */
+.card{ background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:var(--shadow-sm); transition: box-shadow .2s, transform .2s; }
+.card:hover{ box-shadow:var(--shadow); transform:translateY(-2px); }
 
-/* === Badges === */
-.badge {
-  display:inline-block; padding:2px 8px;
-  border-radius:999px; font-size:12px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card) 85%, var(--bg));
-  color: var(--muted);
-}
+/* Buttons */
+.btn{ display:inline-flex; align-items:center; justify-content:center; cursor:pointer; padding:10px 16px; border-radius:10px; border:1px solid transparent; background:linear-gradient(180deg,var(--grad-acc-1),var(--grad-acc-2)); font-weight:600; line-height:1; color:#0b1220; box-shadow:var(--shadow-sm); transition: transform .15s, box-shadow .15s, filter .15s; }
+.btn:hover{ transform:scale(1.03); box-shadow:0 0 12px rgba(34,197,94,.45); }
+.btn:active{ transform:scale(.98); filter:brightness(.97); }
+.btn:disabled,[aria-disabled="true"]{ opacity:.6; cursor:not-allowed; box-shadow:none; transform:none; }
+.btn.primary{ background:linear-gradient(180deg,var(--grad-acc2-1),var(--grad-acc2-2)); }
 
-/* Skeleton Loader */
-.skeleton {
-  display:block; min-height:60vh; border-radius:12px;
-  background: linear-gradient(90deg,#e5e7eb 0%,#f1f5f9 50%,#e5e7eb 100%);
-  background-size:200% 100%;
-  animation: sk 1.2s linear infinite;
-}
-@keyframes sk { 0%{background-position:0 0} 100%{background-position:200% 0} }
+/* Badges */
+.badge{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid var(--border); background: color-mix(in srgb, var(--card) 85%, var(--bg)); color:#6b7280; }
+
+/* Skeleton */
+.skeleton{ display:block; min-height:60vh; border-radius:12px; background:linear-gradient(90deg,#e5e7eb 0%,#f1f5f9 50%,#e5e7eb 100%); background-size:200% 100%; animation:sk 1.2s linear infinite; }
+@keyframes sk{ 0%{background-position:0 0} 100%{background-position:200% 0} }
+
+/* scroll lock for side panel */
+body.no-scroll{ overflow:hidden; }
 
 /* Disable animations before ready */
-html:not(.ready) * {
-  transition:none !important;
-  animation-duration:0s !important;
-}
+html:not(.ready) *{ transition:none !important; animation-duration:0s !important; }
 
 /* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0s !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0s !important; transition:none !important; }
 }
-

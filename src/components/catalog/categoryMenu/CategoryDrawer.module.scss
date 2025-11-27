@@ -1,0 +1,110 @@
+/* CategoryDrawer.module.scss */
+
+/* затемнення + контейнер для bottom-sheet */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+
+  display: flex;
+  flex-direction: column;
+
+  background: rgba(15, 23, 42, 0.35);
+}
+
+/* сама нижня панель */
+.body {
+  margin-top: auto; /* притискаємо донизу */
+  background: #ffffff;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.3);
+
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px 12px;
+  overflow: hidden;
+}
+
+/* шапка всередині sheet */
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 4px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.head strong {
+  font-size: 16px;
+}
+
+/* кнопка закриття */
+.close {
+  font-size: 18px;
+  background: transparent;
+  border: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* скролювана область */
+.bodyInner {
+  padding: 10px 2px 8px;
+  overflow: auto;
+  display: grid;
+  gap: 12px;
+}
+
+/* блок секції */
+.block {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 10px 8px;
+}
+
+.blockTitle {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.ic {
+  width: 22px;
+  text-align: center;
+}
+
+/* колонки в секції */
+.cols {
+  display: grid;
+  gap: 8px;
+}
+
+.col {
+}
+
+.colCap {
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+/* "Всі категорії" */
+.all {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  margin-top: 4px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* тільки мобілка */
+@media (min-width: 1025px) {
+  .sheet {
+    display: none;
+  }
+}

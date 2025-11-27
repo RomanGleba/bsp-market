@@ -1,0 +1,49 @@
+.bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  height: 56px;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 2000;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  gap: 4px;
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cart {
+  position: relative;
+}
+
+.bubble {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(180deg, var(--grad-acc2-1), var(--grad-acc2-2));
+  border-radius: 50%;
+  padding: 0 4px;
+  height: 16px;
+  min-width: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .bar { display: flex; }
+}

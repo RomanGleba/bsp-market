@@ -1,4 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectUser, selectIsAuth } from '../../../store/authSlice.js';
 import s from './ProductTabs.module.scss';
 
 const lsGet = (k, def = []) => {
@@ -23,6 +26,10 @@ const Star = ({ filled, onClick, size = 18, label }) => (
 export default function ReviewsQA({ sku }) {
     const revKey = `reviews_${sku}`;
     const qaKey  = `qa_${sku}`;
+
+    const user   = useSelector(selectUser);
+    const isAuth = useSelector(selectIsAuth);
+    const navigate = useNavigate();
 
     const [mode, setMode] = useState('reviews'); // 'reviews' | 'qa'
     const [items, setItems] = useState(() => lsGet(revKey, []));
@@ -57,16 +64,23 @@ export default function ReviewsQA({ sku }) {
         return d;
     }, [items]);
 
-    // дії
+    // дії — викликаються тільки якщо форма відрендерена (тобто isAuth === true)
     const addReview = (e) => {
         e.preventDefault();
         const t = text.replace(/\s+/g, ' ').trim();
         if (t.length < 10) return;
         const next = [{
             id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`,
-            sku, text: t, rating: Math.min(5, Math.max(1, rating)), createdAt: Date.now()
+            sku,
+            text: t,
+            rating: Math.min(5, Math.max(1, rating)),
+            createdAt: Date.now(),
+            userName: user?.name || 'Користувач',
         }, ...items];
-        lsSet(revKey, next); setItems(next); setText(''); setRating(5);
+        lsSet(revKey, next);
+        setItems(next);
+        setText('');
+        setRating(5);
         topRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
@@ -76,9 +90,14 @@ export default function ReviewsQA({ sku }) {
         if (t.length < 5) return;
         const next = [{
             id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`,
-            sku, text: t, createdAt: Date.now()
+            sku,
+            text: t,
+            createdAt: Date.now(),
+            userName: user?.name || 'Користувач',
         }, ...qas];
-        lsSet(qaKey, next); setQas(next); setQText('');
+        lsSet(qaKey, next);
+        setQas(next);
+        setQText('');
         setMode('qa');
     };
 
@@ -100,7 +119,7 @@ export default function ReviewsQA({ sku }) {
                 </button>
             </div>
 
-            {/* Зведення + гістограма як у Rozetka */}
+            {/* Зведення + гістограма */}
             <div className={s.grid}>
                 <div className={s.summary}>
                     <div className={s.avgNum}>{avg || '—'}</div>
@@ -129,26 +148,51 @@ export default function ReviewsQA({ sku }) {
                 </div>
             </div>
 
+            {/* Якщо НЕ залогінений – показуємо кнопку "Залишити відгук", яка веде на логін */}
+            {!isAuth && (
+                <div className={s.notice}>
+                    <p className={s.muted}>
+                        Щоб залишити відгук або поставити запитання, будь ласка увійдіть у свій акаунт.
+                    </p>
+                    <button
+                        type="button"
+                        className="btn primary"
+                        onClick={() => navigate('/login')}
+                    >
+                        Залишити відгук
+                    </button>
+                </div>
+            )}
+
             {/* Зміст вкладок */}
             {mode === 'reviews' ? (
                 <div className={s.listWrap}>
-                    <form onSubmit={addReview} className={s.form}>
-                        <div className={s.stars} aria-label="Оцінка">
-                            {[1,2,3,4,5].map((n) =>
-                                <Star key={n} filled={n <= rating} onClick={() => setRating(n)} label={`${n} з 5`} />
-                            )}
-                        </div>
-                        <textarea
-                            className={s.ta}
-                            placeholder="Ваш відгук… (мінімум 10 символів)"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            rows={3}
-                            maxLength={1000}
-                            required
-                        />
-                        <button className="btn primary" type="submit">Додати відгук</button>
-                    </form>
+                    {isAuth && (
+                        <form onSubmit={addReview} className={s.form}>
+                            <div className={s.stars} aria-label="Оцінка">
+                                {[1,2,3,4,5].map((n) =>
+                                    <Star
+                                        key={n}
+                                        filled={n <= rating}
+                                        onClick={() => setRating(n)}
+                                        label={`${n} з 5`}
+                                    />
+                                )}
+                            </div>
+                            <textarea
+                                className={s.ta}
+                                placeholder="Ваш відгук… (мінімум 10 символів)"
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                rows={3}
+                                maxLength={1000}
+                                required
+                            />
+                            <button className="btn primary" type="submit">
+                                Додати відгук
+                            </button>
+                        </form>
+                    )}
 
                     {!items.length ? (
                         <div className={s.muted}>Ще немає відгуків. Будьте першим!</div>
@@ -157,11 +201,19 @@ export default function ReviewsQA({ sku }) {
                             {items.map((r) => (
                                 <li key={r.id} className={`${s.revItem} card`}>
                                     <div className={s.revHead}>
-                                        <div className={s.revStars}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
-                                        <time className={s.date} dateTime={new Date(r.createdAt).toISOString()}>
+                                        <div className={s.revStars}>
+                                            {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                                        </div>
+                                        <time
+                                            className={s.date}
+                                            dateTime={new Date(r.createdAt).toISOString()}
+                                        >
                                             {new Date(r.createdAt).toLocaleDateString()}
                                         </time>
                                     </div>
+                                    {r.userName && (
+                                        <div className={s.revAuthor}>{r.userName}</div>
+                                    )}
                                     <p className={s.txt}>{r.text}</p>
                                 </li>
                             ))}
@@ -170,18 +222,22 @@ export default function ReviewsQA({ sku }) {
                 </div>
             ) : (
                 <div className={s.listWrap}>
-                    <form onSubmit={addQuestion} className={s.form}>
-            <textarea
-                className={s.ta}
-                placeholder="Ваше запитання до товару… (мінімум 5 символів)"
-                value={qText}
-                onChange={(e) => setQText(e.target.value)}
-                rows={3}
-                maxLength={800}
-                required
-            />
-                        <button className="btn" type="submit">Поставити запитання</button>
-                    </form>
+                    {isAuth && (
+                        <form onSubmit={addQuestion} className={s.form}>
+                            <textarea
+                                className={s.ta}
+                                placeholder="Ваше запитання до товару… (мінімум 5 символів)"
+                                value={qText}
+                                onChange={(e) => setQText(e.target.value)}
+                                rows={3}
+                                maxLength={800}
+                                required
+                            />
+                            <button className="btn" type="submit">
+                                Поставити запитання
+                            </button>
+                        </form>
+                    )}
 
                     {!qas.length ? (
                         <div className={s.muted}>Запитань ще немає.</div>
@@ -191,10 +247,16 @@ export default function ReviewsQA({ sku }) {
                                 <li key={q.id} className="card">
                                     <div className={s.row}>
                                         <b>Запитання</b>
-                                        <time className={s.date} dateTime={new Date(q.createdAt).toISOString()}>
+                                        <time
+                                            className={s.date}
+                                            dateTime={new Date(q.createdAt).toISOString()}
+                                        >
                                             {new Date(q.createdAt).toLocaleDateString()}
                                         </time>
                                     </div>
+                                    {q.userName && (
+                                        <div className={s.revAuthor}>{q.userName}</div>
+                                    )}
                                     <p className={s.txt}>{q.text}</p>
                                 </li>
                             ))}

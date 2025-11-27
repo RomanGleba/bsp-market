@@ -1,4 +1,4 @@
-// src/api/ProductApi.js
+// src/api/productApi.js
 import http from './http';
 
 /* ---------- helpers ---------- */
@@ -8,17 +8,27 @@ const normalizeProduct = (x = {}) => ({
     title:       x.title ?? x.name ?? '',
     price:       Number(x.price ?? 0),
     promoPrice:  x.promoPrice != null ? Number(x.promoPrice) : undefined,
-    stock:       x.stock != null ? Number(x.stock) : undefined,
+
+    // 🔹 бренд як назва (для меню, фільтрів по назві)
     brand:       x.brand ?? x.manufacturer ?? '',
-    category:    x.category ?? x.cat ?? '',
-    image:       x.image ?? x.photo ?? x.thumb ?? '',
+    // 🔹 brandId — якщо захочеш будувати фільтр по id
+    brandId:     x.brandId ?? '',
+
+    category:    x.category ?? '',
+
+    image:       x.image ?? x.photo ?? '',
     thumb:       x.thumb ?? x.image ?? '',
     description: x.description ?? x.desc ?? '',
-    attrs:       x.attrs ?? x.attributes ?? [],
+    descriptionHtml: x.descriptionHtml ?? '',
+
+    images:      Array.isArray(x.images) ? x.images : (x.image ? [x.image] : []),
+    isAvailable: x.isAvailable == null ? true : !!x.isAvailable,
+
+    // на всякий — щоб знати, з якого сайту (shop / company)
+    site:        x.site ?? 'shop',
 });
 
 const normalizeList = (data) => {
-    // приймаємо і масив, і обгортки {items,...} або {data:{items,...}}
     const box = data?.data ?? data;
     const items = Array.isArray(box) ? box : (box?.items ?? box?.rows ?? []);
     return {
@@ -31,37 +41,31 @@ const normalizeList = (data) => {
 
 /* ---------- API ---------- */
 
-// GET /products?q=&page=&limit=&cat=&brand=&kind=&sort=
+// GET /shop/products
 export async function getProducts(params = {}, { signal } = {}) {
-    const { data } = await http.get('/products', { params, signal });
+    const { data } = await http.get('/shop/products', { params, signal });
     const res = normalizeList(data);
-    // Підставляємо запитані page/limit, якщо бек не повернув
     return {
         items: res.items,
         total: res.total,
-        page:  res.page  || Number(params.page  ?? 1),
+        page:  res.page || Number(params.page ?? 1),
         limit: res.limit || Number(params.limit ?? 12),
     };
 }
 
-// GET /products/:id
 export async function getProductById(id, { signal } = {}) {
-    const { data } = await http.get(`/products/${encodeURIComponent(id)}`, { signal });
+    const { data } = await http.get(`/shop/products/${encodeURIComponent(id)}`, { signal });
     const src = data?.data ?? data?.item ?? data?.product ?? data;
     return normalizeProduct(src);
 }
 
-// Варіанти маршруту на бекові:
-// 1) GET /products/sku/:sku
-// 2) або GET /products?sku=...
 export async function getProductBySku(sku, { signal } = {}) {
     try {
-        const { data } = await http.get(`/products/sku/${encodeURIComponent(sku)}`, { signal });
+        const { data } = await http.get(`/shop/products/sku/${encodeURIComponent(sku)}`, { signal });
         const src = data?.data ?? data?.item ?? data?.product ?? data;
         return normalizeProduct(src);
-    } catch (e) {
-        // fallback на query-пошук
-        const { data } = await http.get('/products', { params: { sku }, signal });
+    } catch {
+        const { data } = await http.get('/shop/products', { params: { sku }, signal });
         const { items } = normalizeList(data);
         return items[0] ?? null;
     }

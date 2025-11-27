@@ -1,0 +1,40 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.link {
+  display: inline-flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s;
+}
+
+.link:hover {
+  background: color-mix(in srgb, var(--card) 85%, var(--bg));
+}
+
+.basket {
+  position: relative;
+}
+
+.bubble {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(180deg, var(--grad-acc2-1), var(--grad-acc2-2));
+  padding: 0 5px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 12px;
+  color: #0b1220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

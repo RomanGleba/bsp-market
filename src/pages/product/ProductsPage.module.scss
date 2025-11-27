@@ -1,0 +1,82 @@
+$gap: 14px;
+$gap-sm: 10px;
+$bp-md: 960px;
+$bp-sm: 600px;
+
+/* мінімальна ширина колонки (під Rozetka ~ 220–240px) */
+$card-min-desktop: 220px;
+$card-min-mobile: 180px;
+
+.layout {
+  display: block;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .count {
+    opacity: 0.75;
+    font-size: 14px;
+  }
+
+  button { white-space: nowrap; }
+}
+
+/* Більш щільна сітка */
+.grid {
+  display: grid;
+  gap: $gap-sm;
+  grid-template-columns: repeat(auto-fill, minmax($card-min-desktop, 1fr));
+}
+
+.empty {
+  margin-top: 12px;
+  padding: 14px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.pager {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 14px;
+  flex-wrap: wrap;
+
+  button[aria-current='page'] {
+    background: var(--focus-brd, #3b82f6);
+    color: #fff;
+  }
+}
+
+/* 📱 Мобільна адаптація */
+@media (max-width: $bp-md) {
+  .grid { gap: 10px; }
+}
+
+@media (max-width: $bp-sm) {
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .count { font-size: 13px; }
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax($card-min-mobile, 1fr));
+  }
+
+  .pager { gap: 6px; }
+}
+
+/* Дуже вузькі (старі телефони) */
+@media (max-width: 360px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}

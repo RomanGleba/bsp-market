@@ -1,0 +1,180 @@
+/* ===== FULL-WIDTH MEGA-MENU В СТИЛІ COMFY ===== */
+
+/* Фонова панель на всю ширину екрану */
+.wrap {
+  position: fixed;                          /* відносно вікна */
+  left: 0;
+  right: 0;
+  top: var(--header-h, 72px);              /* прямо під хедером */
+  z-index: 80;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.08);
+
+  animation: megaIn 0.12s ease-out;
+}
+
+@keyframes megaIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Внутрішній контейнер по центру (як .container) */
+.inner {
+  max-width: 1200px;                       /* підлаштуй під свій .container */
+  margin: 0 auto;
+  padding: 20px 40px 24px;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  column-gap: 32px;
+
+  /* 👇 головне: однакова висота завжди */
+  height: 260px;                           /* можеш змінити на 280–300, якщо мало */
+}
+
+/* ===== ЛІВА КОЛОНКА ===== */
+
+.left {
+  display: flex;
+  flex-direction: column;
+  padding-right: 16px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.tree {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* пункт в лівому списку */
+.leftItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+
+  background: transparent;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  text-align: left;
+  outline: none;
+
+  transition:
+          background-color 0.15s ease,
+          border-color 0.15s ease;
+}
+
+.leftItem:hover,
+.leftItem:focus-visible {
+  background: #f3f4f6;
+}
+
+/* іконка/емодзі зліва */
+.ic {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* Активний пункт – зелена рамка, як у Comfy */
+.active {
+  background: #ecfdf5;
+  border-color: #22c55e;
+}
+
+/* "Всі категорії" внизу лівої колонки */
+.all {
+  margin-top: auto;
+  padding: 8px 2px 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.all:hover {
+  text-decoration: underline;
+}
+
+/* ===== ПРАВА ЧАСТИНА (колонки посилань) ===== */
+
+.right {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+
+  /* 👇 якщо десь дуже багато пунктів — скрол всередині,
+     але висота всієї панелі НЕ міняється */
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+}
+
+.col {
+  min-width: 0;
+}
+
+.colTitle {
+  font-weight: 700;
+  font-size: 15px;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+/* список лінків у колонці */
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.links a {
+  font-size: 14px;
+  color: #0f172a;
+  text-decoration: none;
+}
+
+.links a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* ===== Тільки десктоп ===== */
+
+@media (max-width: 1024px) {
+  .wrap {
+    display: none;
+  }
+}

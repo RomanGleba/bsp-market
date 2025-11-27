@@ -1,142 +1,137 @@
-// src/pages/productdetails/ProductDetails.jsx
-import React, { lazy, Suspense, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
+import React, { lazy, Suspense, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
 import {
     selectProductBySku,
     selectCurrentProduct,
     selectCurrentProductStatus,
     fetchProductBySku,
     clearCurrent,
-} from '../../store/productsSlice';
-import { addToCartRemote } from '../../store/cartSlice';
+} from "@/store/productsSlice"
+import { addToCartRemote } from "@/store/cartSlice"
+import CdnImage from "@/utils/cdnImage"
+import s from "./ProductDetails.module.scss"
 
-import s from './ProductDetails.module.scss';
+const ProductSections = lazy(() => import("./productSelections/ProductSelections.jsx"))
 
-// Папка: productSections
-const ProductSections = lazy(() => import('./productSelections/ProductSelections.jsx'));
-
-const fmt = new Intl.NumberFormat('uk-UA', {
-    style: 'currency',
-    currency: 'UAH',
-    maximumFractionDigits: 0,
-});
-
-class TabsBoundary extends React.Component {
-    constructor(props) { super(props); this.state = { hasError: false }; }
-    static getDerivedStateFromError() { return { hasError: true }; }
-    componentDidCatch() {}
-    render() {
-        if (this.state.hasError) return <div className="card">Не вдалося завантажити вкладки.</div>;
-        return this.props.children;
-    }
-}
+const fmt = new Intl.NumberFormat("uk-UA", {
+    style: "currency",
+    currency: "UAH",
+})
 
 export default function ProductDetails() {
-    const { sku: rawSku } = useParams();
-    const sku = decodeURIComponent(rawSku || '');
-    const d = useDispatch();
+    const { sku: rawSku } = useParams()
+    const sku = decodeURIComponent(rawSku || "")
+    const dispatch = useDispatch()
 
-    const cached    = useSelector(selectProductBySku(sku));
-    const current   = useSelector(selectCurrentProduct);
-    const statusOne = useSelector(selectCurrentProductStatus);
-    const product   = cached || current;
-
-    useEffect(() => {
-        if (!sku) return;
-        d(fetchProductBySku(sku));
-        return () => { d(clearCurrent()); };
-    }, [sku, d]);
+    const cached = useSelector(selectProductBySku(sku))
+    const current = useSelector(selectCurrentProduct)
+    const status = useSelector(selectCurrentProductStatus)
+    const product = cached || current
 
     useEffect(() => {
-        if (product?.title) document.title = `${product.title} – Dasty Pet Food`;
-    }, [product]);
+        if (!sku) return
+        dispatch(fetchProductBySku(sku))
+        return () => dispatch(clearCurrent())
+    }, [sku, dispatch])
 
-    if (statusOne === 'loading' && !product) {
-        return <section className="container"><div className="skeleton"></div></section>;
-    }
-    if ((statusOne === 'succeeded' || statusOne === 'failed') && !product) {
+    if (status === "loading" && !product) {
         return (
-            <section className="container">
-                <div className="card">
-                    Товар не знайдено. <Link to="/products">Повернутися до каталогу</Link>
-                </div>
-            </section>
-        );
+            <div className={s.container}>
+                <div className={s.skeleton}></div>
+            </div>
+        )
     }
-    if (!product) return null;
 
-    const hasPromo = typeof product.promoPrice === 'number' && product.promoPrice < product.price;
-    const price = hasPromo ? product.promoPrice : product.price;
-    const out = (Number(product?.stock) || 0) <= 0;
+    if ((status === "succeeded" || status === "failed") && !product) {
+        return (
+            <div className={s.container}>
+                <p>Товар не знайдено.</p>
+                <Link to="/products" className="btn primary">Повернутися до каталогу</Link>
+            </div>
+        )
+    }
+
+    if (!product) return null
+
+    const hasPromo = typeof product.promoPrice === "number" && product.promoPrice < product.price
+    const price = hasPromo ? product.promoPrice : product.price
+    const canBuy = product.isAvailable !== false
 
     return (
-        <section className="container">
+        <div className={s.container}>
             <div className={s.layout}>
+                {/* Зображення */}
                 <div className={s.media}>
                     {product.image ? (
-                        <img
-                            src={product.image}
-                            alt={`${product.brand ? product.brand + ' ' : ''}${product.title}`}
-                            loading="lazy"
+                        <CdnImage
+                            srcKey={product.image}
+                            alt={product.title}
                             className={s.photo}
                         />
                     ) : (
-                        <div className={s.noimg} role="img" aria-label="Зображення відсутнє" />
+                        <div className={s.noimg} aria-label="Зображення відсутнє" />
                     )}
                 </div>
 
+                {/* Інформація */}
                 <div className={s.info}>
                     <h1 className={s.title}>{product.title}</h1>
+
                     <div className={s.meta}>
-                        <span className={s.sku}>Код: <b>{product.sku || '—'}</b></span>
+                        <span className={s.sku}>Код: <b>{product.sku}</b></span>
                         {product.brand && <span className={s.brand}>{product.brand}</span>}
                         {product.category && <span className={s.cat}>{product.category}</span>}
+                        {!canBuy && <span className={s.badgeOutPill}>Немає в наявності</span>}
                     </div>
 
                     <div className={s.priceRow}>
-                        {hasPromo ? (
+                        <span className={s.price}>{fmt.format(price)}</span>
+                        {hasPromo && (
                             <>
-                                <div>
-                                    <span className="price">{fmt.format(Math.round(price))}</span>{' '}
-                                    <span className={s.old}><s>{fmt.format(Math.round(product.price))}</s></span>
-                                </div>
-                                <span className="badge">Акція</span>
+                                <span className={s.old}><s>{fmt.format(product.price)}</s></span>
+                                <span className={s.badge}>Акція</span>
                             </>
-                        ) : (
-                            <span className="price">{fmt.format(Math.round(price))}</span>
                         )}
                     </div>
 
                     <div className={s.actions}>
-            <span role="status" aria-live="polite" className={`badge ${out ? s.badgeOutPill : s.badgeIn}`}>
-              {out ? 'Немає в наявності' : 'Є в наявності'}
-            </span>
                         <button
+                            onClick={() =>
+                                dispatch(addToCartRemote({
+                                    id: product.id,
+                                    sku: product.sku,
+                                    title: product.title,
+                                    price,
+                                    image: product.image,
+                                    qty: 1,
+                                }))
+                            }
                             className="btn primary"
-                            disabled={out}
-                            aria-disabled={out}
-                            onClick={() => d(addToCartRemote({
-                                id: product.id,
-                                sku: product.sku,
-                                title: product.title,
-                                price,
-                                image: product.image,
-                                qty: 1,
-                            }))}
+                            disabled={!canBuy}
                         >
-                            Додати в кошик
+                            {canBuy ? "Додати в кошик" : "Немає в наявності"}
                         </button>
+                        {canBuy && <span className={s.badgeIn}>Є в наявності</span>}
                     </div>
                 </div>
             </div>
 
-            <Suspense fallback={<div className="skeleton"></div>}>
-                <TabsBoundary>
+            {/* Додаткові секції */}
+            <div className="mt-8">
+                <Suspense
+                    fallback={
+                        <div className={s.card}>
+                            <div className={s.skeleton}></div>
+                        </div>
+                    }
+                >
                     <ProductSections product={product} />
-                </TabsBoundary>
-            </Suspense>
-        </section>
-    );
+                </Suspense>
+            </div>
+
+            <div className="mt-8">
+            </div>
+        </div>
+    )
 }

@@ -1,2 +1,205 @@
-.footer { border-top:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.02); }
-.inner { padding:16px 0; display:flex; align-items:center; justify-content:space-between; }
+.footer {
+  background: #111111;
+  color: #f5f5f5;
+  font-size: 14px;
+  margin-top: 40px;
+
+  // 💡 full-width навіть якщо Layout / body мають padding / container
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+
+  a {
+    color: #c7c7c7;
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+      color: #ffffff;
+      opacity: 1;
+    }
+  }
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) repeat(3, minmax(0, 1.4fr));
+  gap: 32px;
+  padding: 32px 0 24px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    padding: 24px 0 16px;
+  }
+}
+
+/* Лого-колонка */
+.colBrand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.logoMark {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #39b54a; // "комфівський" зелений вайб
+}
+
+.description {
+  color: #a0a0a0;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+/* Гаряча лінія */
+.hotline {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hotlineLabel {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7f7f7f;
+}
+
+.hotlinePhone {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+.hotlineTime {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* Колонки */
+.column {
+  font-size: 13px;
+}
+
+.title {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f0f0f0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 6px;
+    color: #c7c7c7;
+    line-height: 1.4;
+  }
+}
+
+/* Соцмережі */
+.socials {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: 12px;
+    color: #e5e5e5;
+    opacity: 0.85;
+
+    &:hover {
+      border-color: #39b54a;
+      color: #ffffff;
+      opacity: 1;
+    }
+  }
+}
+
+/* Нижня смуга */
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0b0b0b;
+  font-size: 12px;
+  color: #9b9b9b;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.bottomLeft {
+  opacity: 0.8;
+}
+
+.bottomLinks {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  a {
+    font-size: 12px;
+    opacity: 0.9;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  }
+}
+
+.made {
+  font-size: 12px;
+  opacity: 0.8;
+  white-space: nowrap;
+
+  span {
+    margin: 0 2px;
+  }
+
+  @media (max-width: 768px) {
+    align-self: flex-start;
+  }
+}

@@ -1,0 +1,224 @@
+/* ProductDetails.module.scss */
+:root {
+  --pd-gap: 16px;
+  --pd-gap-lg: 24px;
+  --pd-radius: 16px;
+  --pd-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+  --pd-muted: #6b7280;      /* gray-500 */
+  --pd-border: #e5e7eb;     /* gray-200 */
+  --pd-ok: #10b981;         /* emerald-500 */
+  --pd-warn: #ef4444;       /* red-500 */
+  --pd-brand: #2563eb;      /* blue-600 */
+  --pd-bg-soft: #fafafa;
+}
+
+.container {
+  /* якщо у тебе вже є глобальний .container — можна не використовувати цей селектор */
+}
+
+/* ======= Головний лейаут ======= */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--pd-gap-lg);
+  align-items: start;
+  margin-block: clamp(12px, 2vw, 24px);
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1.1fr; /* media | info */
+    gap: clamp(20px, 2.5vw, 32px);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: 520px 1fr;
+  }
+}
+
+/* ======= Блок зображення ======= */
+.media {
+  background: white;
+  border: 1px solid var(--pd-border);
+  border-radius: var(--pd-radius);
+  box-shadow: var(--pd-shadow);
+  padding: clamp(8px, 1.2vw, 16px);
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  aspect-ratio: 1 / 1;       /* квадратна вітрина за замовчуванням */
+  object-fit: contain;
+  background: var(--pd-bg-soft);
+}
+
+/* placeholder, якщо немає зображення */
+.noimg {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: repeating-linear-gradient(
+                  -45deg,
+                  #f3f4f6 0 10px,
+                  #e5e7eb 10px 20px
+  );
+  border: 1px dashed var(--pd-border);
+}
+
+/* ======= Інфо блок ======= */
+.info {
+  display: grid;
+  gap: var(--pd-gap);
+}
+
+.title {
+  margin: 0;
+  line-height: 1.2;
+  font-size: clamp(20px, 2.6vw, 34px);
+  font-weight: 700;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--pd-muted);
+  font-size: clamp(12px, 1.6vw, 14px);
+}
+
+.sku b {
+  color: #111827; /* gray-900 */
+}
+
+.brand,
+.cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;       /* gray-100 */
+  color: #374151;            /* gray-700 */
+  font-weight: 600;
+}
+
+/* ======= Блок ціни ======= */
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  .price {
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #fef3c7; /* amber-100 */
+    color: #92400e;      /* amber-800 */
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.2px;
+  }
+}
+
+.old {
+  color: var(--pd-muted);
+  font-weight: 600;
+  margin-left: 4px;
+  s {
+    text-decoration-thickness: 2px;
+    text-decoration-color: #9ca3af; /* gray-400 */
+  }
+}
+
+/* ======= Дії ======= */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 767.98px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    /* робимо кнопку на всю ширину */
+    .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 14px 16px;
+      font-size: 16px;
+    }
+  }
+
+  .btn {
+    cursor: pointer;
+    border-radius: 12px;
+  }
+}
+
+/* статуси наявності */
+.badgeIn,
+.badgeOutPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+.badgeIn {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--pd-ok);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badgeOutPill {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--pd-warn);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ======= Дрібні утиліти ======= */
+.card {
+  background: white;
+  border: 1px solid var(--pd-border);
+  border-radius: var(--pd-radius);
+  box-shadow: var(--pd-shadow);
+  padding: 20px;
+}
+
+.skeleton {
+  height: 280px;
+  border-radius: var(--pd-radius);
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ======= Опціонально: краще торк-цілі для мобіли ======= */
+.actions button,
+.actions .btn {
+  min-height: 44px;
+}
+
+/* ======= Опціонально: компактніше на дуже малих екранах ======= */
+@media (max-width: 360px) {
+  .meta { gap: 6px; }
+  .brand, .cat { padding: 5px 8px; }
+}

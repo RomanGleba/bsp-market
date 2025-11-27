@@ -1,0 +1,64 @@
+:root {
+  --header-h: 64px;
+  --z-header: 1000;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  min-height: 64px;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.desktopOnly { display: initial; }
+.mobileOnly  { display: none !important; }
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.ic { display: inline-flex; }
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .desktopOnly { display: none !important; }
+  .mobileOnly  { display: inline-flex !important; }
+
+  :root { --header-h: 56px; }
+
+  .inner {
+    display: grid !important;
+    grid-template-columns: auto 1fr; /* Brand | Search */
+    align-items: center;
+    padding: 8px 0;
+    gap: 8px;
+    min-height: 56px;
+  }
+
+  .mobileSearchBtn {
+    justify-self: center;
+  }
+}

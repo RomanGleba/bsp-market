@@ -1,25 +1,41 @@
 // src/api/http.js
 import axios from 'axios';
 
+// Працює у Vite; без process.env, щоб не ловити ESLint (no-undef)
+function resolveBaseURL() {
+    const env = (typeof import.meta !== 'undefined' && import.meta.env) || {};
+    const base =
+        env.VITE_API_BASE_URL ||
+        env.VITE_API_BASE ||
+        env.REACT_APP_API_BASE_URL || // на всяк випадок при спільному коді з CRA
+        env.REACT_APP_API_BASE ||
+        'http://localhost:5000';
+    return String(base).replace(/\/+$/, '');
+}
+
 const http = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api',
+    baseURL: resolveBaseURL(),
     timeout: 15000,
-    withCredentials: true, // ← лиши true, якщо бек віддає cookie-сесію; інакше можеш вимкнути
-    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true,
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 });
 
-// (опційно) підставляємо Bearer-токен з localStorage
 http.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token'); // змінй на свій спосіб зберігання
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    try {
+        const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null;
+        if (token) config.headers.Authorization = `Bearer ${token}`;
+    } catch { /* no-op */ }
     return config;
 });
 
-// (опційно) нормалізуємо помилки
 http.interceptors.response.use(
     (res) => res,
     (err) => {
-        const msg = err?.response?.data?.message || err.message || 'Network error';
+        const msg =
+            err?.response?.data?.message ||
+            err?.response?.data?.error ||
+            err?.message ||
+            'Network error';
         err.message = Array.isArray(msg) ? msg.join(', ') : msg;
         return Promise.reject(err);
     }
